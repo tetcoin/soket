@@ -9,7 +9,7 @@ license = "Apache-2.0 OR MIT"
 readme = "README.md"
 repository = "https://github.com/tetcoin/soket"
 homepage = "https://github.com/tetcoin/soket"
-documentaion = "https://docs.rs/soket"
+documentation = "https://docs.rs/soket"
 edition = "2018"
 
 [package.metadata.docs.rs]
