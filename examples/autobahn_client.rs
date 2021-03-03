@@ -15,12 +15,12 @@
 // See https://github.com/crossbario/autobahn-testsuite for details.
 
 use futures::io::{BufReader, BufWriter};
-use soketto::{BoxedError, connection, handshake};
+use soket::{BoxedError, connection, handshake};
 use std::str::FromStr;
 use tokio::net::TcpStream;
 use tokio_util::compat::{Compat, Tokio02AsyncReadCompatExt};
 
-const SOKETTO_VERSION: &str = env!("CARGO_PKG_VERSION");
+const SOKET_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[tokio::main]
 async fn main() -> Result<(), BoxedError> {
@@ -49,7 +49,7 @@ async fn num_of_cases() -> Result<usize, BoxedError> {
 
 async fn run_case(n: usize) -> Result<(), BoxedError> {
     log::info!("running case {}", n);
-    let resource = format!("/runCase?case={}&agent=soketto-{}", n, SOKETTO_VERSION);
+    let resource = format!("/runCase?case={}&agent=soket-{}", n, SOKET_VERSION);
     let socket = TcpStream::connect("127.0.0.1:9001").await?;
     let mut client = new_client(socket, &resource);
     assert!(matches!(client.handshake().await?, handshake::ServerResponse::Accepted {..}));
@@ -58,12 +58,12 @@ async fn run_case(n: usize) -> Result<(), BoxedError> {
     loop {
         message.clear();
         match receiver.receive_data(&mut message).await {
-            Ok(soketto::Data::Binary(n)) => {
+            Ok(soket::Data::Binary(n)) => {
                 assert_eq!(n, message.len());
                 sender.send_binary_mut(&mut message).await?;
                 sender.flush().await?
             }
-            Ok(soketto::Data::Text(n)) => {
+            Ok(soket::Data::Text(n)) => {
                 assert_eq!(n, message.len());
                 sender.send_text(std::str::from_utf8(&message)?).await?;
                 sender.flush().await?
@@ -76,7 +76,7 @@ async fn run_case(n: usize) -> Result<(), BoxedError> {
 
 async fn update_report() -> Result<(), BoxedError> {
     log::info!("requesting report generation");
-    let resource = format!("/updateReports?agent=soketto-{}", SOKETTO_VERSION);
+    let resource = format!("/updateReports?agent=soket-{}", SOKET_VERSION);
     let socket = TcpStream::connect("127.0.0.1:9001").await?;
     let mut client = new_client(socket, &resource);
     assert!(matches!(client.handshake().await?, handshake::ServerResponse::Accepted {..}));
@@ -93,7 +93,7 @@ fn new_client(socket: TcpStream, path: &str) -> handshake::Client<'_, BufReader<
 fn new_client(socket: TcpStream, path: &str) -> handshake::Client<'_, BufReader<BufWriter<Compat<TcpStream>>>> {
     let socket = BufReader::with_capacity(8 * 1024, BufWriter::with_capacity(64 * 1024, socket.compat()));
     let mut client = handshake::Client::new(socket, "127.0.0.1:9001", path);
-    let deflate = soketto::extension::deflate::Deflate::new(soketto::Mode::Client);
+    let deflate = soket::extension::deflate::Deflate::new(soket::Mode::Client);
     client.add_extension(Box::new(deflate));
     client
 }

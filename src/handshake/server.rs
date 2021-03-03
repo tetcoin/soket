@@ -29,7 +29,7 @@ use super::{
 };
 
 const BLOCK_SIZE: usize = 8 * 1024;
-const SOKETTO_VERSION: &str = env!("CARGO_PKG_VERSION");
+const SOKET_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Websocket handshake client.
 #[derive(Debug)]
@@ -185,8 +185,8 @@ impl<'a, T: AsyncRead + AsyncWrite + Unpin> Server<'a, T> {
                     &key_buf[.. n]
                 };
                 self.buffer.extend_from_slice(b"HTTP/1.1 101 Switching Protocols");
-                self.buffer.extend_from_slice(b"\r\nServer: soketto-");
-                self.buffer.extend_from_slice(SOKETTO_VERSION.as_bytes());
+                self.buffer.extend_from_slice(b"\r\nServer: soket-");
+                self.buffer.extend_from_slice(SOKET_VERSION.as_bytes());
                 self.buffer.extend_from_slice(b"\r\nUpgrade: websocket\r\nConnection: upgrade");
                 self.buffer.extend_from_slice(b"\r\nSec-WebSocket-Accept: ");
                 self.buffer.extend_from_slice(accept_value);

@@ -15,7 +15,7 @@
 // See https://github.com/crossbario/autobahn-testsuite for details.
 
 use futures::io::{BufReader, BufWriter};
-use soketto::{BoxedError, connection, handshake};
+use soket::{BoxedError, connection, handshake};
 use tokio::{net::{TcpListener, TcpStream}, stream::StreamExt};
 use tokio_util::compat::{Compat, Tokio02AsyncReadCompatExt};
 
@@ -36,12 +36,12 @@ async fn main() -> Result<(), BoxedError> {
         loop {
             message.clear();
             match receiver.receive_data(&mut message).await {
-                Ok(soketto::Data::Binary(n)) => {
+                Ok(soket::Data::Binary(n)) => {
                     assert_eq!(n, message.len());
                     sender.send_binary_mut(&mut message).await?;
                     sender.flush().await?
                 }
-                Ok(soketto::Data::Text(n)) => {
+                Ok(soket::Data::Text(n)) => {
                     assert_eq!(n, message.len());
                     if let Ok(txt) = std::str::from_utf8(&message) {
                         sender.send_text(txt).await?;
@@ -70,7 +70,7 @@ fn new_server<'a>(socket: TcpStream) -> handshake::Server<'a, BufReader<BufWrite
 fn new_server<'a>(socket: TcpStream) -> handshake::Server<'a, BufReader<BufWriter<Compat<TcpStream>>>> {
     let socket = BufReader::with_capacity(8 * 1024, BufWriter::with_capacity(16 * 1024, socket.compat()));
     let mut server = handshake::Server::new(socket);
-    let deflate = soketto::extension::deflate::Deflate::new(soketto::Mode::Server);
+    let deflate = soket::extension::deflate::Deflate::new(soket::Mode::Server);
     server.add_extension(Box::new(deflate));
     server
 }

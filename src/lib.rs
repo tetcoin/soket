@@ -28,8 +28,8 @@
 //!
 //! ```no_run
 //! # use tokio_util::compat::Tokio02AsyncReadCompatExt;
-//! # async fn doc() -> Result<(), soketto::BoxedError> {
-//! use soketto::handshake::{Client, ServerResponse};
+//! # async fn doc() -> Result<(), soket::BoxedError> {
+//! use soket::handshake::{Client, ServerResponse};
 //!
 //! // First, we need to establish a TCP connection.
 //! let socket = tokio::net::TcpStream::connect("...").await?;
@@ -63,8 +63,8 @@
 //! ```no_run
 //! # use tokio_util::compat::Tokio02AsyncReadCompatExt;
 //! # use tokio::stream::StreamExt;
-//! # async fn doc() -> Result<(), soketto::BoxedError> {
-//! use soketto::{handshake::{Server, ClientRequest, server::Response}};
+//! # async fn doc() -> Result<(), soket::BoxedError> {
+//! use soket::{handshake::{Server, ClientRequest, server::Response}};
 //!
 //! // First, we listen for incoming connections.
 //! let mut listener = tokio::net::TcpListener::bind("...").await?;

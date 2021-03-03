@@ -1,4 +1,4 @@
-# Soketto
+# Soket
 
 An implementation of the [RFC 6455][1] websocket protocol.
 This crate is a heavily modified fork of the [twist][3] crate.
